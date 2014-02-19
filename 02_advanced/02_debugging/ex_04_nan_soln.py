@@ -6,7 +6,7 @@
 # Second, we run the same functionality without the Print op. We verify that
 # the softmax op appears in the compiled graph, and we verify that the new
 # graph gets the correct output.
-from detect_op_soln import contains_softmax
+from ex_03_detect_op_soln import contains_softmax
 
 import numpy as np
 
@@ -30,6 +30,7 @@ output = f(X)
 
 assert np.all(np.isnan(output))
 
+X = T.matrix()
 p_tilde = T.exp(X)
 denom = p_tilde.sum(axis=1, keepdims=True)
 p = p_tilde / denom
