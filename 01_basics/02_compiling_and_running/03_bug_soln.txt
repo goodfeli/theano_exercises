@@ -1,0 +1,9 @@
+The weird thing is that if you think about how the function call is
+implemented, the two arguments have different shapes, and so should
+the resulting values of x and z. The line adding x and z should therefore
+result in a ValueError. However, when run in the default mode it does not.
+The reason is that the optimizations realize that z is always 0, so adding
+z to x has no effect. The optimizations thus remove the addition of z.
+However, this causes the function to fail to raise an error for bad values
+of x and y. To use fewer optimizations and see the bug, you can use
+THEANO_FLAGS="mode=FAST_COMPILE". DEBUG_MODE will also catch the bug.
