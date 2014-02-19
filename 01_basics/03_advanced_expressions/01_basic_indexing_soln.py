@@ -1,5 +1,3 @@
-# Fill in the TODOs in this exercise, then run the script to see if your
-# solution works.
 import numpy as np
 import theano.tensor as T
 
@@ -11,7 +9,9 @@ def increment_odd(x):
     incremented by 1.
     """
 
-    raise NotImplementedError("TODO: implement the function.")
+    y = T.inc_subtensor(x[1::2], 1.)
+    return y
+
 
 if __name__ == "__main__":
     x = T.vector()
