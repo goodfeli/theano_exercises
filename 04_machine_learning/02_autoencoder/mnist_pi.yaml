@@ -1,0 +1,66 @@
+!obj:pylearn2.train.Train {
+    dataset: &train !obj:pylearn2.datasets.mnist.MNIST {
+        which_set: 'train',
+        start: 0,
+        stop: 50000
+    },
+    model: !obj:autoencoder.Autoencoder {
+        layers: [
+                 !obj:pylearn2.models.mlp.Sigmoid {
+                     layer_name: 'h0',
+                     dim: 240,
+                     irange: .1,
+                     init_bias: -2.,
+                     max_col_norm: 1.9365,
+                 },
+                 !obj:pylearn2.models.mlp.Sigmoid {
+                     layer_name: 'h1',
+                     dim: 784,
+                     irange: .05,
+                     max_col_norm: 1.9365,
+                 }
+                ],
+        nvis: 784,
+    },
+    algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
+        batch_size: 100,
+        learning_rate: 1.,
+        learning_rule: !obj:pylearn2.training_algorithms.learning_rule.Momentum {
+            init_momentum: .5,
+        },
+        monitoring_dataset:
+            {
+                'train' : *train,
+                'valid' : !obj:pylearn2.datasets.mnist.MNIST {
+                              which_set: 'train',
+                              start: 50000,
+                              stop:  60000
+                          },
+            },
+        cost: !obj:pylearn2.costs.mlp.dropout.Dropout {
+            input_include_probs: { 'h0' : .8 },
+            input_scales: { 'h0': 1. }
+        },
+        termination_criterion: !obj:pylearn2.termination_criteria.MonitorBased {
+            channel_name: "valid_objective",
+            prop_decrease: 0.,
+            N: 100
+        },
+        update_callbacks: !obj:pylearn2.training_algorithms.sgd.ExponentialDecay {
+            decay_factor: 1.000004,
+            min_lr: .000001
+        }
+    },
+    extensions: [
+        !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
+             channel_name: 'valid_objective',
+             save_path: "${PYLEARN2_TRAIN_FILE_FULL_STEM}_best.pkl"
+        },
+        !obj:pylearn2.training_algorithms.learning_rule.MomentumAdjustor {
+            start: 1,
+            saturate: 250,
+            final_momentum: .7
+        }
+    ],
+    save_freq: 1
+}
