@@ -18,3 +18,4 @@ if __name__ == "__main__":
     xv = np.zeros((4,), dtype=x.dtype)
     yv = increment_odd(x).eval({x:xv})
     assert np.allclose(yv, np.array([0., 1., 0., 1.]))
+    print "SUCCESS!"
