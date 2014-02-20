@@ -30,3 +30,4 @@ if __name__ == "__main__":
     mean = samples.mean(axis=0)
     # Unlikely your mean would be off by this much (but possible)
     assert np.abs(mean - p.get_value()).max() < .2
+    print "SUCCESS!"
