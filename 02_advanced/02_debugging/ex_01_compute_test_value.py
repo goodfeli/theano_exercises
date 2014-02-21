@@ -17,3 +17,4 @@ g = e + f
 h = g / c
 fn = function([a], h)
 fn(np.ones((3,)).astype(a.dtype))
+print "SUCCESS!"
