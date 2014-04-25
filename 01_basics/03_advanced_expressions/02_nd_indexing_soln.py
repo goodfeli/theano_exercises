@@ -1,6 +1,7 @@
 import numpy as np
 
 from theano import config
+from theano import shared
 from theano import tensor as T
 
 def shrink_tensor(x, w):
@@ -22,7 +23,7 @@ def shrink_tensor(x, w):
 if __name__ == "__main__":
     x = T.TensorType(config.floatX, (False, False, False))()
     xv = np.random.randn(10, 11, 12).astype(config.floatX)
-    y = shrink_tensor(x, 3).eval({x : xv})
+    y = shrink_tensor(x, shared(3)).eval({x : xv})
     assert y.shape == (4, 5, 6), y.shape
     for i in xrange(4):
         for j in xrange(5):
