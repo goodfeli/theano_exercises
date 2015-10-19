@@ -45,10 +45,9 @@ if __name__ == "__main__":
     m = 2
     nv = 3
     nh = 4
-    v0 = T.alloc(1., m, nv)
     h0 = T.alloc(1., m, nh)
     rng_factory = MRG_RandomStreams(42)
-    W = rng_factory.normal(size=(nv, nh), dtype=v0.dtype)
+    W = rng_factory.normal(size=(nv, nh), dtype=h0.dtype)
     pv = T.nnet.sigmoid(T.dot(h0, W.T))
     v = rng_factory.binomial(p=pv, size=pv.shape, dtype=W.dtype)
     ph = T.nnet.sigmoid(T.dot(v, W))
